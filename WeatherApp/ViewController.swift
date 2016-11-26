@@ -29,6 +29,18 @@ class ViewController: UIViewController {
         let currentWeather = CurrentWeather(temperature: 10.0, appearentTemperature: 5.0, humidity: 30, pressure: 750, icon: icon)
         updateUIWith(currentWeather: currentWeather)
 
+        let urlString = "https://api.darksky.net/forecast/90fe8aa3eba5b3f71e0f2f5197286cd9/37.8267,-122.4233"
+        let baseURL = URL(string: "https://api.darksky.net/forecast/90fe8aa3eba5b3f71e0f2f5197286cd9/")
+        let fullURL = URL(string: "37.8267,-122.4233", relativeTo: baseURL)
+
+        let sessionConfiguration = URLSessionConfiguration.default
+        let session = URLSession(configuration: sessionConfiguration)
+
+        let request = URLRequest(url: fullURL!)
+        let dataTask = session.dataTask(with: fullURL!) { (data, response, error) in
+            
+        }
+        dataTask.resume()
     }
 
     func updateUIWith(currentWeather: CurrentWeather) {
