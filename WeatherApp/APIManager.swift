@@ -21,10 +21,9 @@ protocol APIManager {
     var sessionConfiguration: URLSessionConfiguration { get }
     var session: URLSession { get }
 
-    func JSONTaskWith(request: URLRequest, completionHandler: JSONComletionHandler) -> JSONTask
-    func fetch<T>(request: URLRequest, parse: ([String: AnyObject]) -> T?, completionHandler: (APIResult<T>) -> Void)
+    func JSONTaskWith(request: URLRequest, completionHandler: @escaping JSONComletionHandler) -> JSONTask
+    func fetch<T>(request: URLRequest, parse: @escaping ([String: AnyObject]) -> T?, completionHandler: @escaping (APIResult<T>) -> Void)
 
-    init(sessionConfiguration: URLSessionConfiguration)
 }
 
 extension APIManager {
@@ -50,7 +49,7 @@ extension APIManager {
                 case 200:
                     do {
                         let json = try JSONSerialization.jsonObject(with: data!, options: []) as? [String: AnyObject]
-                        completionHandler(json, HTTPResponse, error)
+                        completionHandler(json, HTTPResponse, nil)
                     } catch let error as NSError {
                         completionHandler(nil, HTTPResponse, error)
                     }
@@ -62,7 +61,7 @@ extension APIManager {
         return dataTask
     }
 
-    func fetch<T>(request: URLRequest, parse: ([String: AnyObject]) -> T?, completionHandler: (APIResult<T>) -> Void) {
+    func fetch<T>(request: URLRequest, parse: @escaping ([String: AnyObject]) -> T?, completionHandler: @escaping (APIResult<T>) -> Void) {
         let dataTask = JSONTaskWith(request: request) { (json, response, error) in
 
             guard let json = json else {
