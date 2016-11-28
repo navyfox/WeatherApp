@@ -11,6 +11,12 @@ import Foundation
 typealias JSONTask = URLSessionDataTask
 typealias JSONComletionHandler = ([String: AnyObject]?, HTTPURLResponse?, Error?) -> Void
 
+protocol FinalURLPoint {
+    var baseURL: URL { get }
+    var path: String { get }
+    var request: URLRequest { get }
+}
+
 enum APIResult<T> {
     case Success(T)
     case Failure(Error)
