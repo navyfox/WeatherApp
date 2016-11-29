@@ -11,6 +11,10 @@ import Foundation
 typealias JSONTask = URLSessionDataTask
 typealias JSONComletionHandler = ([String: AnyObject]?, HTTPURLResponse?, Error?) -> Void
 
+protocol JSONDecodable {
+    init?(JSON: [String: AnyObject])
+}
+
 protocol FinalURLPoint {
     var baseURL: URL { get }
     var path: String { get }
@@ -28,7 +32,7 @@ protocol APIManager {
     var session: URLSession { get }
 
     func JSONTaskWith(request: URLRequest, completionHandler: @escaping JSONComletionHandler) -> JSONTask
-    func fetch<T>(request: URLRequest, parse: @escaping ([String: AnyObject]) -> T?, completionHandler: @escaping (APIResult<T>) -> Void)
+    func fetch<T: JSONDecodable>(request: URLRequest, parse: @escaping ([String: AnyObject]) -> T?, completionHandler: @escaping (APIResult<T>) -> Void)
 
 }
 
