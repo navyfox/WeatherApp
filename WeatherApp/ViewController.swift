@@ -22,11 +22,26 @@ class ViewController: UIViewController {
     @IBAction func refreshButtonTapped(_ sender: UIButton) {
     }
 
+    lazy var weatherManager = APIWeatherManager(apiKey: "90fe8aa3eba5b3f71e0f2f5197286cd9")
+    let coordinates = Coordinates(latitude: 54.969287,longitude: 73.383463)
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        updateUIWith(currentWeather: currentWeather)
+        weatherManager.fetchCurrentWeatherWith(coordinates: coordinates) { (result) in
+            switch result {
+            case .Success(let currentWeather):
+                self.updateUIWith(currentWeather: currentWeather)
+            case .Failure(let error as NSError):
 
+                let alertController = UIAlertController(title: "Unable to get data ", message: "\(error.localizedDescription)", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alertController.addAction(okAction)
+
+                self.present(alertController, animated: true, completion: nil)
+            default: break
+            }
+        }
     }
 
     func updateUIWith(currentWeather: CurrentWeather) {
